@@ -2,7 +2,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Soenneker.Managers.Runners.Registrars;
 using Soenneker.DropboxSign.Runners.OpenApiClient.Utils;
 using Soenneker.DropboxSign.Runners.OpenApiClient.Utils.Abstract;
+using Soenneker.OpenApi.Fixer.Registrars;
 using Soenneker.Utils.File.Download.Registrars;
+using Soenneker.Utils.Yaml.Registrars;
 
 namespace Soenneker.DropboxSign.Runners.OpenApiClient;
 
@@ -22,7 +24,9 @@ public static class Startup
         services.AddHostedService<ConsoleHostedService>()
                 .AddScoped<IFileOperationsUtil, FileOperationsUtil>()
                 .AddRunnersManagerAsScoped()
-                .AddFileDownloadUtilAsScoped();
+                .AddFileDownloadUtilAsScoped()
+                .AddYamlUtilAsScoped()
+                .AddOpenApiFixerAsScoped();
 
         return services;
     }
