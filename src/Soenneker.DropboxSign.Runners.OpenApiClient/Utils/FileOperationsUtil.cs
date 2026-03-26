@@ -70,7 +70,7 @@ public sealed class FileOperationsUtil : IFileOperationsUtil
 
         await _yamlUtil.SaveAsJson(filePath, jsonPath, true, cancellationToken);
 
-        string fixedPath = Path.Combine(gitDirectory, "openapi.json");
+        string fixedPath = Path.Combine(gitDirectory, "fixed.json");
 
         await _openApiFixer.Fix(jsonPath, fixedPath, cancellationToken);
 
