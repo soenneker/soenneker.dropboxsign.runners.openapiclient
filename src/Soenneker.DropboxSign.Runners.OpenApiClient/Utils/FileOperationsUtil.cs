@@ -72,6 +72,8 @@ public sealed class FileOperationsUtil : IFileOperationsUtil
 
         string fixedPath = Path.Combine(gitDirectory, "fixed.json");
 
+        await _fileUtil.DeleteIfExists(fixedPath, cancellationToken: cancellationToken);
+
         await _openApiFixer.Fix(jsonPath, fixedPath, cancellationToken);
 
         await _processUtil.Start("dotnet", null, "tool update --global Microsoft.OpenApi.Kiota", waitForExit: true, cancellationToken: cancellationToken);
