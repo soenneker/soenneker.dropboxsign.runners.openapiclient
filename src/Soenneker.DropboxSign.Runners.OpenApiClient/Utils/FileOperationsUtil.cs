@@ -11,7 +11,6 @@ using Soenneker.Utils.Environment;
 using Soenneker.Utils.File.Abstract;
 using Soenneker.Utils.File.Download.Abstract;
 using Soenneker.Utils.Process.Abstract;
-using Soenneker.Utils.Yaml;
 using Soenneker.Utils.Yaml.Abstract;
 using System;
 using System.Collections.Generic;
@@ -67,6 +66,8 @@ public sealed class FileOperationsUtil : IFileOperationsUtil
         string? filePath = await _fileDownloadUtil.Download(openApiDocumentUrl, yamlPath, fileExtension: ".yaml", cancellationToken: cancellationToken);
 
         string jsonPath = Path.Combine(gitDirectory, "openapi.json");
+
+        await _fileUtil.DeleteIfExists(jsonPath, cancellationToken: cancellationToken);
 
         await _yamlUtil.SaveAsJson(filePath, jsonPath, true, cancellationToken);
 
