@@ -83,10 +83,7 @@ public sealed class FileOperationsUtil : IFileOperationsUtil
 
         await DeleteAllExceptCsproj(srcDirectory, cancellationToken);
 
-        await _processUtil.Start("kiota", gitDirectory,
-                              $"kiota generate -l CSharp -d \"{fixedPath}\" -o src/{Constants.Library} -c DropboxSignOpenApiClient -n {Constants.Library}",
-                              waitForExit: true, cancellationToken: cancellationToken)
-                          .NoSync();
+        await _openApiFixer.GenerateKiota(fixedPath, "DropboxSignOpenApiClient", Constants.Library, $"src/{Constants.Library}", cancellationToken);
 
         await BuildAndPush(gitDirectory, cancellationToken)
             .NoSync();
