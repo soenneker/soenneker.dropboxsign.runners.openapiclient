@@ -11,7 +11,6 @@ using Soenneker.Utils.Dotnet.Abstract;
 using Soenneker.Utils.Environment;
 using Soenneker.Utils.File.Abstract;
 using Soenneker.Utils.File.Download.Abstract;
-using Soenneker.Utils.Process.Abstract;
 using Soenneker.Utils.Yaml.Abstract;
 using System;
 using System.Collections.Generic;
@@ -29,7 +28,6 @@ public sealed class FileOperationsUtil : IFileOperationsUtil
     private readonly IConfiguration _configuration;
     private readonly IGitUtil _gitUtil;
     private readonly IDotnetUtil _dotnetUtil;
-    private readonly IProcessUtil _processUtil;
     private readonly IKiotaUtil _kiotaUtil;
     private readonly IFileDownloadUtil _fileDownloadUtil;
     private readonly IFileUtil _fileUtil;
@@ -38,14 +36,13 @@ public sealed class FileOperationsUtil : IFileOperationsUtil
     private readonly IYamlUtil _yamlUtil;
 
     public FileOperationsUtil(ILogger<FileOperationsUtil> logger, IConfiguration configuration, IGitUtil gitUtil, IDotnetUtil dotnetUtil,
-        IProcessUtil processUtil, IFileDownloadUtil fileDownloadUtil, IFileUtil fileUtil, IDirectoryUtil directoryUtil, IOpenApiFixer openApiFixer,
-        IYamlUtil yamlUtil, IKiotaUtil kiotaUtil)
+        IFileDownloadUtil fileDownloadUtil, IFileUtil fileUtil, IDirectoryUtil directoryUtil, IOpenApiFixer openApiFixer, IYamlUtil yamlUtil,
+        IKiotaUtil kiotaUtil)
     {
         _logger = logger;
         _configuration = configuration;
         _gitUtil = gitUtil;
         _dotnetUtil = dotnetUtil;
-        _processUtil = processUtil;
         _kiotaUtil = kiotaUtil;
         _fileDownloadUtil = fileDownloadUtil;
         _fileUtil = fileUtil;
@@ -86,7 +83,7 @@ public sealed class FileOperationsUtil : IFileOperationsUtil
 
         await DeleteAllExceptCsproj(srcDirectory, cancellationToken);
 
-        await _openApiFixer.GenerateKiota(fixedPath, "DropboxSignOpenApiClient", Constants.Library, srcDirectory, cancellationToken);
+        await _kiotaUtil.Generate(fixedPath, "DropboxSignOpenApiClient", Constants.Library, srcDirectory, cancellationToken);
 
         await BuildAndPush(gitDirectory, cancellationToken)
             .NoSync();
